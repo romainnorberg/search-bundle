@@ -10,6 +10,8 @@ use Symfony\Component\Console\Input\ArrayInput;
 
 abstract class SettingsCommandTest extends BaseTest
 {
+    protected $command;
+
     /**
      * Here we really want to test the full integration
      * and talk with Algolia servers.
@@ -33,7 +35,12 @@ abstract class SettingsCommandTest extends BaseTest
     public static function tearDownAfterClass()
     {
         parent::tearDownAfterClass();
-        static::staticGetIndexer()->deleteIndex('ProductForAlgoliaIntegrationTest');
+
+        $indexer = static::staticGetIndexer();
+        $indexer->deleteIndex(metaenv('ProductForAlgoliaIntegrationTest_dev'),[
+            'perEnvironment' => false,
+            'adaptIndexName' => false,
+        ]);
     }
 
     public function runCommand(array $args = array())
